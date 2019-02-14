@@ -15,6 +15,7 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var moviePoster: UIImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var overviewLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
     
     var movie: [String:Any]?
     
@@ -22,7 +23,12 @@ class DetailViewController: UIViewController {
         super.viewDidLoad()
         
         titleLabel.text=movie?["title"] as! String
+        
+        
         overviewLabel.text=movie?["overview"] as! String
+        
+        dateLabel.text=movie?["release_date"] as! String
+        
         
         
         let baseURL = "https://image.tmdb.org/t/p/w780"
