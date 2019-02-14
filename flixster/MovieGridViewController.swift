@@ -7,13 +7,29 @@
 //
 
 import UIKit
+import AlamofireImage
 
-class MovieGridViewController: UIViewController {
+class MovieGridViewController: UIViewController,UICollectionViewDataSource,UICollectionViewDelegate {
+  
+    
 
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     var movies = [[String:Any]]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
+        let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
+        
+        layout.minimumLineSpacing = 2
+        layout.minimumInteritemSpacing = 2
+        
+        let width = (view.frame.size.width - layout.minimumInteritemSpacing) / 2
+        layout.itemSize = CGSize(width: width, height: width*1.3)
 
         // Do any additional setup after loading the view.
         let url = URL(string: "https://api.themoviedb.org/3/movie/297762/similar?api_key=a07e22bc18f5cb106bfe4cc1f83ad8ed")!
@@ -28,6 +44,7 @@ class MovieGridViewController: UIViewController {
                 
                 self.movies = dataDictionary["results"] as! [[String:Any]]
                 
+                self.collectionView.reloadData()
                 
                 print(self.movies)
                 
@@ -37,6 +54,26 @@ class MovieGridViewController: UIViewController {
     }
     
 
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return movies.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+      let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MovieGridCell", for: indexPath) as! MovieGridCell
+        
+        let movie = movies[indexPath.item]
+        
+        let baseURL = "https://image.tmdb.org/t/p/w185"
+        let posterPath = movie["poster_path"] as! String
+        let posterURL = URL(string: baseURL + posterPath)
+        
+        cell.posterView.af_setImage(withURL: posterURL!)
+        
+        
+        return cell
+    }
+    
     /*
     // MARK: - Navigation
 
@@ -46,5 +83,12 @@ class MovieGridViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let cell = sender as! UICollectionViewCell
+        let indexPath = collectionView.indexPath(for: cell)
+        let detailViewController = segue.destination as! DetailViewController
+        detailViewController.movie=movies[(indexPath?.item)!]
+    }
 
 }

@@ -30,13 +30,13 @@ class DetailViewController: UIViewController {
         dateLabel.text=movie?["release_date"] as! String
         
         
-        
-        let baseURL = "https://image.tmdb.org/t/p/w780"
+        let smallbaseURL = "https://image.tmdb.org/t/p/w185"
         let posterPath = movie?["poster_path"] as! String
-        let posterURL = URL(string: baseURL + posterPath)
+        let posterURL = URL(string: smallbaseURL + posterPath)
         
         moviePoster.af_setImage(withURL: posterURL!)
         
+        let baseURL = "https://image.tmdb.org/t/p/w780"
         let backdropPath = movie?["backdrop_path"] as! String
         let backdropURL=URL(string: baseURL + backdropPath )
         
