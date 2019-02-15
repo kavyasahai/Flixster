@@ -45,6 +45,9 @@ class VideoViewController: UIViewController {
             }
         }
         task.resume()
+        let urlstring = "https://www.youtube.com/watch?v=\(self.key)"
+        let url2 = URL(string: urlstring)
+        webView.loadRequest(URLRequest(url:url2!))
     }
     
    
