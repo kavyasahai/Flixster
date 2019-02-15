@@ -22,6 +22,12 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        backdropPoster.isUserInteractionEnabled = true
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(self.tapGesture))
+        backdropPoster.addGestureRecognizer(tapGesture)
+        
+        
         titleLabel.text=movie?["title"] as! String
         
         
@@ -46,5 +52,14 @@ class DetailViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
   
+    @objc func tapGesture(){
+        performSegue(withIdentifier: "showVideo", sender: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let videoViewController = segue.destination as! VideoViewController
+//        print(movie!["id"]!)
+        videoViewController.id=movie!["id"] as! NSNumber
+    }
 
 }
